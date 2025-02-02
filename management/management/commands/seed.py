@@ -30,9 +30,10 @@ class Command(BaseCommand):
                             for subtask in task["subtasks"]:
                                 # print(f"Column task, subtasks number: {len(task["subtasks"])}")
 
-                                subtask = Subtask.objects.create(
+                                subtask = Task.objects.create(
                                     title=subtask["title"],
                                     is_completed=subtask["isCompleted"],
+                                    board_column=c,
                                     task_parent=t
                                 )
                 # print("\n")

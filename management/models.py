@@ -27,24 +27,33 @@ class Task(models.Model):
     description = models.CharField(max_length=255, null=True, blank=True)
     board_column = models.ForeignKey(BoardColumn, on_delete=models.CASCADE, related_name='tasks')
     is_completed = models.BooleanField(default=False)
+    task_parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, default=None, related_name="subtasks")
+
+    def save(self, *args, **kwargs):
+        subtasks = self.subtasks.all()
+
+        if all(subtask.board_column_id != self.board_column_id for subtask in subtasks):
+            [subtask.save() for subtask in subtasks if
+             setattr(subtask, 'board_column', self.board_column) or True]
+
+        super(Task, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - {self.description[15]}"
 
-
-class Subtask(models.Model):
-    title = models.CharField(max_length=255)
-    task_parent = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
-    is_completed = models.BooleanField(default=False)
-
-    # def save(self, *args, **kwargs):
-    #     parent_subtasks = self.task_parent.subtasks.all()
-    #
-    #     if all(subtask.is_completed for subtask in parent_subtasks):
-    #         self.task_parent.is_completed = True
-    #         self.task_parent.save()
-    #
-    #     super(Subtask, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
+# class Subtask(models.Model):
+#     title = models.CharField(max_length=255)
+#     task_parent = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
+#     is_completed = models.BooleanField(default=False)
+#
+#     # def save(self, *args, **kwargs):
+#     #     parent_subtasks = self.task_parent.subtasks.all()
+#     #
+#     #     if all(subtask.is_completed for subtask in parent_subtasks):
+#     #         self.task_parent.is_completed = True
+#     #         self.task_parent.save()
+#     #
+#     #     super(Subtask, self).save(*args, **kwargs)
+#
+#     def __str__(self):
+#         return self.title

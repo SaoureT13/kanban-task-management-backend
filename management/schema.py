@@ -16,6 +16,7 @@ class UserSchemaOut(Schema):
     last_name: str
     username: str"""
 
+
 class ColumnUpdateSchema(ModelSchema):
     class Meta:
         model = BoardColumn
@@ -32,18 +33,19 @@ class BoardUpdateSchema(ModelSchema):
         exclude = ["slug"]
 
 
-class SubtaskUpdateSchema(ModelSchema):
-    class Meta:
-        model = Subtask
-        fields = ["title", "id"]
-        fields_optional = ["id"]
+# class SubtaskUpdateSchema(ModelSchema):
+#     class Meta:
+#         model = Subtask
+#         fields = ["title", "id"]
+#         fields_optional = ["id"]
 
 class TaskUpdateSchema(ModelSchema):
-    subtasks: Optional[List[SubtaskUpdateSchema]] = None
+    # subtasks: Optional[List[SubtaskUpdateSchema]] = None
+    board_column: Optional[int] = None
     class Meta:
         model = Task
         fields = "__all__"
-        exclude = ["is_completed"]
+        exclude = ["is_completed", "task_parent", "id"]
 
 
 class ColumnSchemaIn(ModelSchema):
@@ -61,36 +63,37 @@ class BoardSchemaIn(ModelSchema):
         exclude = ["id", "slug"]
 
 
-class SubTaskSchemaIn(ModelSchema):
-    class Meta:
-        model = Subtask
-        fields = "__all__"
-        fields_optional = ["task_parent"]
-        exclude = ["is_completed", "id"]
+# class SubTaskSchemaIn(ModelSchema):
+#     class Meta:
+#         model = Subtask
+#         fields = "__all__"
+#         fields_optional = ["task_parent"]
+#         exclude = ["is_completed", "id"]
 
 
 class SubTaskSchema(Schema):
     title: str
+    description: Optional[str] = None
 
 
 class TaskSchemaIn(ModelSchema):
-    subtasks: Optional[List[SubTaskSchema]] = None
+    # subtasks: Optional[List[SubTaskSchema]] = None
 
     class Meta:
         model = Task
         fields = "__all__"
-        fields_optional = ["description"]
+        fields_optional = ["description","task_parent_id"]
         exclude = ["id", "is_completed"]
 
 
-class SubTaskSchemaOut(ModelSchema):
-    class Meta:
-        model = Subtask
-        fields = "__all__"
+# class SubTaskSchemaOut(ModelSchema):
+#     class Meta:
+#         model = Subtask
+#         fields = "__all__"
 
 
 class TaskSchemaOut(ModelSchema):
-    subtasks: List[SubTaskSchemaOut] = None
+    # subtasks: List[SubTaskSchemaOut] = None
 
     class Meta:
         model = Task
@@ -106,7 +109,7 @@ class ColumnSchemaOut(ModelSchema):
 
 
 class BoardSchemaOut(ModelSchema):
-    columns: List[ColumnSchemaOut] = None
+    # columns: List[ColumnSchemaOut] = None
 
     class Meta:
         model = Board
