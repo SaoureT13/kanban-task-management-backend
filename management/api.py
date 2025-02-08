@@ -24,9 +24,15 @@ def get_boards(request):
     return list(queryset)
 
 
-@api.get("/columns/{board_id}", response=List[ColumnSchemaOut])
+@api.get("/columns", response=List[ColumnSchemaOut])
 def get_columns_by_board(request, board_id: int):
     queryset = BoardColumn.objects.filter(board_id=board_id)
+    return list(queryset)
+
+
+@api.get("/tasks", response=List[TaskSchemaOut])
+def get_tasks_by_column(request, column_id: int):
+    queryset = Task.objects.filter(board_column_id=column_id).exclude(task_parent_id__isnull=False)
     return list(queryset)
 
 

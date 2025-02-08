@@ -86,14 +86,14 @@ class TaskSchemaIn(ModelSchema):
         exclude = ["id", "is_completed"]
 
 
-# class SubTaskSchemaOut(ModelSchema):
-#     class Meta:
-#         model = Subtask
-#         fields = "__all__"
+class SubTaskSchemaOut(ModelSchema):
+    class Meta:
+        model = Task
+        fields = "__all__"
 
 
 class TaskSchemaOut(ModelSchema):
-    # subtasks: List[SubTaskSchemaOut] = None
+    subtasks: List[SubTaskSchemaOut] = None
 
     class Meta:
         model = Task
@@ -101,7 +101,7 @@ class TaskSchemaOut(ModelSchema):
 
 
 class ColumnSchemaOut(ModelSchema):
-    tasks: List[TaskSchemaOut] = None
+    # tasks: List[TaskSchemaOut] = None
 
     class Meta:
         model = BoardColumn
