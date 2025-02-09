@@ -55,7 +55,7 @@ def create_board(request, payload: BoardSchemaIn):
 # Update board name and board columns(name)
 @api.put("/boards/{board_id}", response=BoardSchemaOut)
 def update_board(request, board_id: int, payload: BoardUpdateSchema):
-    board = get_object_or_404(Board, pk=payload.id)
+    board = get_object_or_404(Board, pk=board_id)
     board.name = payload.name.capitalize()
     board.save()
 

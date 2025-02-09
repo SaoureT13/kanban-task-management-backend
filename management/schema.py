@@ -30,7 +30,7 @@ class BoardUpdateSchema(ModelSchema):
     class Meta:
         model = Board
         fields = "__all__"
-        exclude = ["slug"]
+        exclude = ["slug", "id"]
 
 
 # class SubtaskUpdateSchema(ModelSchema):
@@ -109,7 +109,7 @@ class ColumnSchemaOut(ModelSchema):
 
 
 class BoardSchemaOut(ModelSchema):
-    # columns: List[ColumnSchemaOut] = None
+    columns: List[ColumnSchemaOut] = None
 
     class Meta:
         model = Board
